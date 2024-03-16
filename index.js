@@ -4,9 +4,12 @@ const http = require('http');
 const mongoose = require('mongoose');
 const config = require('./config/database')
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 // API file for interacting with MongoDB
-const userRoutes = require('./routes/candidatRoute');
+const candidatRoutes = require('./routes/candidatRoute');
+const electeurRoutes = require('./routes/electeurRoute');
+const resultatRoutes = require('./routes/resultatRoute');
 
 if (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'dev'){
 
@@ -33,10 +36,13 @@ mongoose.connection.on('error', () => console.log('error'));
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
+app.use(cors())
 
 
 const apiName = "/api";
-app.use(apiName, userRoutes);
+app.use(apiName, candidatRoutes);
+app.use(apiName, electeurRoutes);
+app.use(apiName, resultatRoutes);
 
 const port = process.env.PORT || "8081";
 app.set(port);

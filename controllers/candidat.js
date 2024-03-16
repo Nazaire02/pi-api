@@ -1,5 +1,6 @@
-const candidats = require('../models/candidats');
 const Candidat = require('../models/candidats');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 exports.addCandidat = async (req, res) => {
     const candidat = new Candidat({
@@ -7,7 +8,7 @@ exports.addCandidat = async (req, res) => {
         prenoms:req.body.prenoms,
         anniversaire:req.body.anniversaire,
         parti: req.body.parti,
-        numCandidat: req.body.numCandidat
+        numCandidat: req.body.numCandidat,
     });
 
     await candidat.save()
@@ -20,6 +21,15 @@ exports.addCandidat = async (req, res) => {
 
 exports.getCandidat = async (req, res)=>{
     await Candidat.find({})
+        .then((candidats)=> res.status(201).json({
+            succes: true,
+            candidats: candidats
+        }))
+        .catch((err)=>console.log(err))
+}
+
+exports.getCandidatById = async (req, res)=>{
+    await Candidat.findOne({_id: req.idCandidat})
         .then((candidats)=> res.status(201).json({
             succes: true,
             candidats: candidats
